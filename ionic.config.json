@@ -1,0 +1,7 @@
+{
+  "name": "lucasgram",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
