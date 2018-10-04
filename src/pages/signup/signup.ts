@@ -2,15 +2,13 @@ import { Component } from '@angular/core';
 import { LoadingController, NavController, AlertController } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AngularFireAuth } from 'angularfire2/auth';
-
-import { SignupPage } from '../signup/signup';
-import { HomePage } from '../home/home';
+import { LoginPage } from '../login/login';
 
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.html'
+  selector: 'page-signup',
+  templateUrl: 'signup.html'
 })
-export class LoginPage {
+export class SignupPage {
   public form: FormGroup;
 
   constructor(
@@ -31,36 +29,35 @@ export class LoginPage {
         Validators.required
       ])]
     });
-
-    afAuth.authState.subscribe(user => {
-      if (user) {
-        this.navCtrl.setRoot(HomePage);
-      }
-    });
   }
 
   submit() {
-    let loader = this.loadingCtrl.create({ content: "Autenticando..." });
+    let loader = this.loadingCtrl.create({ content: "Cadastrando..." });
     loader.present();
 
-    this.afAuth.auth
-      .signInWithEmailAndPassword(this.form.controls['email'].value, this.form.controls['password'].value)
+    this.afAuth.auth.createUserWithEmailAndPassword(this.form.controls['email'].value, this.form.controls['password'].value)
       .then(() => {
         loader.dismiss();
-        this.navCtrl.setRoot(HomePage);
+        let alert = this.alertCtrl.create({
+          title: 'Bem vindo!',
+          subTitle: 'Seu cadastro foi criado com sucesso e você já tem acesso ao nosso App.',
+          buttons: ['OK']
+        });
+        alert.present();
+        this.navCtrl.setRoot(LoginPage);
       })
       .catch(() => {
         loader.dismiss();
         let alert = this.alertCtrl.create({
-          title: 'Autenticação Inválida',
-          subTitle: 'Usuário ou senha incorretos.',
+          title: 'Ops, algo deu errado!',
+          subTitle: 'Não foi possível realizar seu cadastro.',
           buttons: ['OK']
         });
         alert.present();
       });
   }
 
-  goToSignup() {
-    this.navCtrl.setRoot(SignupPage);
+  goToLogin() {
+    this.navCtrl.setRoot(LoginPage);
   }
 }

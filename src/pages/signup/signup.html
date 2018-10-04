@@ -17,7 +17,7 @@
               <ion-input type="password" placeholder="Senha" maxlength="20" formControlName="password"></ion-input>
             </ion-item>
           </ion-list>
-          <button ion-button block large outline (click)="submit()" [disabled]="!form.valid">Entrar</button>
+          <button ion-button block large outline [disabled]="!form.valid" (click)="submit()">Cadastrar</button>
         </form>
       </ion-col>
     </ion-row>
@@ -27,9 +27,9 @@
 <ion-footer>
   <ion-toolbar text-center>
     <ion-buttons>
-      <button small ion-button block (click)="goToSignup()">
-        <small>Ainda não tem conta?&nbsp;
-          <strong>Cadastre-se</strong>
+      <button small ion-button block (click)="goToLogin()" [disabled]="!form.valid">
+        <small>Já tem conta?&nbsp;
+          <strong>Entrar</strong>
         </small>
       </button>
     </ion-buttons>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
   <meta charset="UTF-8">
-  <title>Ionic App</title>
+  <title>Lucasgram</title>
   <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
@@ -18,19 +19,31 @@
   <!-- cordova.js required for cordova apps (remove if not needed) -->
   <script src="cordova.js"></script>
 
-  <!-- un-comment this code to enable service worker
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
         .then(() => console.log('service worker installed'))
         .catch(err => console.error('Error', err));
     }
-  </script>-->
+  </script>
+
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+  <script>
+    var OneSignal = window.OneSignal || [];
+    OneSignal.push(["init", {
+      appId: "113511e1-92c5-45d8-9896-546e9eebd9b6",
+      autoRegister: false,
+      notifyButton: {
+        enable: true
+      }
+    }]);
+  </script>
 
   <link href="build/main.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
   <link rel="stylesheet" href="https://cssgram-cssgram.netdna-ssl.com/cssgram.min.css">
 </head>
+
 <body>
 
   <!-- Ionic's root component and where the app will load -->
@@ -46,5 +59,49 @@
   <!-- The main bundle js is generated during the build process -->
   <script src="build/main.js"></script>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!Notification) {
+        alert('Este browser nao suporta notifocacoes!');
+        return;
+      }
+
+      if (Notification.permission !== 'granted')
+        Notification.requestPermission();
+
+      var notification = new Notification('Bem vindo ao Lucasgram!', {
+        icon: '/assets/icon/icon-512x512.png',
+        body: 'Seja bem vindo ao instagram do Lucas!',
+        vibrate: [200, 100, 200, 100, 200, 100, 200]
+      });
+    });
+
+    function isOnline() {
+      if (navigator.onLine) {
+        var notification = new Notification('Voce esta online!', {
+          icon: '/assets/icon/icon-512x512.png',
+          body: 'Voce esta navegando online, todo conteudo sera enviado ao servidor!',
+          vibrate: [200, 100, 200, 100, 200, 100, 200]
+        });
+        
+        var photos = JSON.parse(localStorage.getItem('photos'));
+        photos.forEach(photo => {
+          console.log(photo.title);
+        });
+
+      } else {
+        var notification = new Notification('Voce esta offline!', {
+          icon: '/assets/icon/icon-512x512.png',
+          body: 'Voce esta navegando offline, todo conteudo sera enviado ao servidor quando estiver online novamente!',
+          vibrate: [200, 100, 200, 100, 200, 100, 200]
+        });
+      }
+    };
+
+    window.addEventListener('online', isOnline);
+    window.addEventListener('offline', isOnline);
+  </script>
+
 </body>
+
 </html>
